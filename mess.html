@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mess Dashboard | PlateShare</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🍽 PlateShare</div>
+  <div class="header-actions">
+    <a href="index.html" class="header-btn">Home</a>
+    <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Logout</button>
+  </div>
+
+</header>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="mess-card">
+    <h2>Post Surplus Food</h2>
+
+    <input type="text" id="foodName" placeholder="Food Name">
+    <input type="number" id="quantity" placeholder="Quantity (plates)">
+    <input type="datetime-local" id="availableTill">
+    <input type="text" id="location" placeholder="Location">
+
+
+    <button class="primary-btn" onclick="postFood()">Post Food</button>
+
+
+    <p style="margin-top:10px;color:#6b7280;">
+      ➜ Food will be marked as <b>AVAILABLE</b>
+    </p>
+  </section>
+
+  <section class="mess-card">
+    <h2>Previously Posted Food</h2>
+     
+    <div id="previousFoodList"></div>
+    <div class="mess-card">
+      <b>Rice & Dal</b><br>
+      Quantity: 20 plates<br>
+      Status: <span style="color:green;">Available</span>
+    </div>
+    </div>
+
+    
+
+  </section>
+
+</main>
+<script type="module" src="app1.js"></script>
+<script type="module" src="mess.js"></script>
+</body>
+</html>

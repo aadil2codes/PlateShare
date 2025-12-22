@@ -1,0 +1,385 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* BODY */
+body {
+  font-family: "PT Sans", sans-serif;
+  background: #f6f8fb;
+  color: #2a845d;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+.header {
+  position: sticky;
+  top: 0;
+  height: 70px;
+  background: #ffffff;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+  
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.logout-btn {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================= HERO (FULL SCREEN) ================= */
+.hero {
+  min-height: 100vh; /* full screen */
+  width: 100%;
+
+  background:
+    linear-gradient(
+      rgba(46, 125, 50, 0.75),
+      rgba(46, 125, 50, 0.75)
+    ),
+    url("hero-bg.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  padding: 20px;
+}
+
+
+.hero-content {
+  max-width: 720px;
+}
+
+.hero h1 {
+  font-size: 44px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 17px;
+  line-height: 1.6;
+  opacity: 0.95;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  background: #ffffff;
+  color: #2e7d32;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  
+}
+
+.hero-btn a {
+  background:  #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ================= HOW IT WORKS ================= */
+.how-it-works {
+  padding: 80px 40px;
+  text-align: center;
+  background: #f6f8fb;
+}
+
+.how-it-works h2 {
+  font-size: 32px;
+  margin-bottom: 45px;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.how-card {
+  background: #ffffff;
+  padding: 30px 22px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.how-card .icon {
+  width: 56px;
+  height: 56px;
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 18px;
+}
+
+.how-card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.how-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+/* ================= AUTH / DASHBOARD ================= */
+.container {
+  
+  width: 100%;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+.card {
+  max-width: 420px;
+  margin: 40px auto;
+  text-align: center;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  margin-bottom: 30px;
+}
+/* Default (landing page) */
+.auth-card {
+  max-width: 420px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.mess-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  margin-bottom: 30px;
+}
+
+.ngo-card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  margin-bottom: 30px;
+}
+
+/* Only for sign-in & sign-up pages */
+.auth-page .auth-card {
+  width: 50%;
+  max-width: 600px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.primary-btn {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  margin: 10px 0px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+.secondary-btn {
+  background: #eeeeee;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.secondary-btn a{
+  text-decoration: none;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.secondary-btn a:hover {
+  text-decoration: none;
+}
+
+/* ================= UTILITY ================= */
+.hidden {
+  display: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sections fill screen height properly */
+.hero,
+.how-it-works,
+#auth-section {
+  min-height: 100vh;
+  scroll-margin-top: 80px; /* prevents header overlap */
+}
+
+/* Optional: slight highlight when auth section is targeted */
+#auth-section:target {
+  animation: focusGlow 0.6s ease;
+}
+
+@keyframes focusGlow {
+  from {
+    box-shadow: 0 0 0 rgba(46,125,50,0);
+  }
+  to {
+    box-shadow: 0 0 0 rgba(46,125,50,0.25);
+  }
+}
+
+
+/* FIX GET STARTED LINK LOOKING LIKE BLUE LINK */
+.hero-btn,
+.hero a,
+a.hero-btn {
+  display: inline-block;
+  background: #ffffff;
+  color: #2e7d32 !important;
+  text-decoration: none !important;   /* remove underline */
+  border: none;
+  padding: 12px 26px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect like real button */
+.hero-btn:hover,
+.hero a:hover,
+a.hero-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-1px);
+ 
+}
+
+/* Remove blue / purple visited link color */
+.hero-btn:visited,
+.hero a:visited,
+a.hero-btn:visited {
+  color: #2e7d32 !important;
+}
+
+/* ================= HEADER BUTTONS ================= */
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+   text-decoration: none;
+  color: inherit;
+}
+
+.header-actions a:hover {
+  text-decoration: none;
+}
+
+.header-btn {
+  display: inline-block;              /* 🔥 important */
+  background: white;
+  color: #21c82c;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;              /* 🔥 remove underline */
+}
+
+.header-btn:visited {
+  color: #1b5e20;                      /* 🔥 stop purple */
+}
+
+.header-btn:hover {
+  background: #e8f5e9;
+}
+
+.header-btn.outline {
+  background: white;
+  color: #1b5e20;
+  border: none;
+}
+.header-actions a,
+.header-actions a:hover {
+  text-decoration: none !important;
+}
+
+.food-card {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 8px;
+  border-left: 5px solid #2e7d32;
+  margin-top: 12px;
+}
+
+
+.auth-link a {
+  text-decoration: none;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.auth-link a:hover {
+  text-decoration: none;
+}
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PlateShare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+  <div class="logo">🍽 PlateShare</div>
+
+  <header class="header">
+
+  <div class="header-actions">
+
+  </div>
+</header>
+
+
+  <div class="header-actions">
+    <div class="header-actions">
+  <a href="index.html" class="header-btn">Home</a>
+    <button id="signinBtn" class="header-btn" onclick="showAuth()"> <a href="signin.html" style="text-decoration: none; color: rgb(0, 133, 11);">Sign In</a></button>
+    <button id="signupBtn" class="header-btn" onclick="showAuth()"><a href="signup.html"  style="text-decoration: none; color: rgb(0, 133, 11);">Sign Up</a></button>
+    <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+ <!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Reduce Food Waste. Feed Those in Need.</h1>
+    <p>PlateShare connects food providers with NGOs to reduce surplus food waste in real time.</p>
+    <button class="hero-btn"><a href="#auth-section">Get Started</a></button>
+  </div>
+</section>
+
+
+<main class="container">
+
+ 
+
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <h2>How It Works</h2>
+
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="icon">🍽</div>
+      <h3>1. Mess Posts Food</h3>
+      <p>
+        Canteens and messes with surplus food post details about available items
+        and pickup times.
+      </p>
+    </div>
+
+    <div class="how-card">
+      <div class="icon">🤝</div>
+      <h3>2. NGO Accepts Pickup</h3>
+      <p>
+        Registered NGOs and volunteers nearby see the listing and accept pickup
+        in real time.
+      </p>
+    </div>
+
+    <div class="how-card">
+      <div class="icon">🚚</div>
+      <h3>3. Food is Collected</h3>
+      <p>
+        The NGO collects the food, preventing waste and feeding people in need.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- AUTH SECTION -->
+  <section id="auth-section" class="card">
+    <h2>Reduce Food Waste. Feed Those in Need.</h2>
+    <input type="name" id="name" placeholder="Name" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+
+    <select id="role">
+      <option value="">Select Role</option>
+      <option value="mess">Mess</option>
+      <option value="ngo">NGO</option>
+    </select>
+
+    <input type="text" id="location" placeholder="Location" />
+
+    <div style="margin-top:15px;">
+      <button onclick="signup()" class="primary-btn">Sign Up</button>
+      <button class="secondary-btn"><a href="signin.html">Login</a></button>
+    </div>
+  </section>
+
+
+  </section>
+
+</main>
+
+<script type="module" src="app1.js"></script>
+</body>
+</html>
