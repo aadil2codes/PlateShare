@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>NGO Dashboard | PlateShare</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -11,36 +13,45 @@
   <div class="logo">🍽 PlateShare</div>
   <div class="header-actions">
     <a href="index.html" class="header-btn">Home</a>
-    <span>NGO Dashboard</span>
+    <span id="ngoName">NGO/Volunteer</span>
   </div>
 </header>
 
 <main class="container">
 
-  <section class="card">
-    <h2>Available Food Nearby</h2>
+  <div class="ngo-dashboard-grid">
 
-    <div id="ngoFoodList"></div>
+    <!-- LEFT: Available Food -->
+    <section class="card">
+      <div class="ngo-header-row">
+        <h2>Available Food Nearby</h2>
+        <button class="secondary-btn" onclick="openFoodMap()">
+         Nearby Search on Map
+        </button>
+      </div>
+      <div id="ngoFoodList"></div>
+    </section>
 
+    <!-- RIGHT: Accepted Food -->
+    <section class="card">
+      <h2>Accepted Food</h2>
+      <div id="pickupFoodList"></div>
+    </section>
+
+  </div>
+  <div id="ngoMapModal" class="map-modal">
+    <div class="map-modal-content">
+      <div id="ngoFoodMap"></div>
+
+      <button class="secondary-btn" onclick="closeFoodMap()">
+      Close
+      </button>
     </div>
-
-  </section>
-
-  <section class="card">
-    <h2>Pickup Status</h2>
-
-    <div id="pickupFoodList"></div>
-
-    <div class="food-card">
-      <b>Chapati Sabzi</b><br>
-      Status: <span style="color:green;">Pickup Confirmed</span>
-    </div>
-  </section>
+  </div>
 
 </main>
+
 <script type="module" src="app.js"></script>
 <script type="module" src="ngo.js"></script>
 </body>
 </html>
-
-
