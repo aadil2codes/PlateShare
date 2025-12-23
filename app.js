@@ -90,11 +90,20 @@ window.signup = async function () {
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const role = document.getElementById("role").value;
 
-    // ✅ Validation
-    if (!name || !email || !password || !role) {
+    // ✅ RADIO BUTTON ROLE
+    const role = document.querySelector(
+      'input[name="role"]:checked'
+    )?.value;
+
+    // ✅ VALIDATION (RIGHT PLACE)
+    if (!name || !email || !password) {
       alert("Please fill all fields");
+      return;
+    }
+
+    if (!role) {
+      alert("Please select a role");
       return;
     }
 
@@ -103,10 +112,10 @@ window.signup = async function () {
       return;
     }
 
-    // ✅ Create Auth user
+    // 🔥 CREATE USER
     const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-    // ✅ Create Firestore user document
+    // 🔥 SAVE USER DATA
     await setDoc(doc(db, "users", cred.user.uid), {
       name,
       email,
@@ -114,7 +123,7 @@ window.signup = async function () {
       createdAt: new Date()
     });
 
-    // ✅ Redirect based on role
+    // 🔁 REDIRECT
     redirect(role);
 
   } catch (error) {
@@ -122,6 +131,7 @@ window.signup = async function () {
     alert(error.message);
   }
 };
+
 
 
 // 🔹 LOGIN
@@ -178,4 +188,26 @@ onAuthStateChanged(auth, async (user) => {
     location.href = "signin.html";
   }
 });
+
+function formatDateTime(date) {
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+}
+
+window.setToday = function () {
+  const input = document.getElementById("availableTill");
+  const now = new Date();
+  input.value = formatDateTime(now);
+  input.min = formatDateTime(now);
+};
+
+window.setTomorrow = function () {
+  const input = document.getElementById("availableTill");
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  input.value = formatDateTime(tomorrow);
+  input.min = formatDateTime(new Date());
+};
+
 
