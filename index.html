@@ -42,7 +42,7 @@
   <div class="hero-content">
     <h1>Reduce Food Waste. Feed Those in Need.</h1>
     <p>
-      PlateShare connects college canteens and messes with NGOs to
+      PlateShare connects Canteens and Messes with NGOs and Volunteers to
       distribute surplus food in real time.
     </p>
     <a href="#auth-section" class="hero-btn">Get Started</a>
@@ -77,8 +77,8 @@
   </section>
 
   <!-- ================= FOOD MAP ================= -->
-<section class="card">
-  <h2>Available Food Near You</h2>
+<section class="card1">
+  <h2>Available Food Nearby</h2>
   <div id="foodMap"></div>
 </section>
 
@@ -91,11 +91,17 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
 
-    <select id="role">
-      <option value="">Select Role</option>
-      <option value="mess">Mess / Canteen</option>
-      <option value="ngo">NGO / Volunteer</option>
-    </select>
+    <div class="role-group">
+      <label class="role-option">
+        <input type="radio" name="role" value="mess">
+        <span>Mess / Canteen</span>
+      </label>
+
+      <label class="role-option">
+        <input type="radio" name="role" value="ngo">
+        <span>NGO / Volunteer</span>
+      </label>
+    </div>
 
     <div style="margin-top: 15px;">
       <button class="primary-btn" onclick="signup()">Sign Up</button>
@@ -110,5 +116,3 @@
 <script type="module" src="app.js"></script>
 </body>
 </html>
-
-
