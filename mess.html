@@ -4,29 +4,31 @@
   <meta charset="UTF-8">
   <title>Mess Dashboard | PlateShare</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 </head>
 <body>
 
 <header class="header">
   <div class="logo">🍽 PlateShare</div>
   <div class="header-actions">
-    <a href="index.html" class="header-btn">Home</a>
-    <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Logout</button>
-  </div>
-
-</header>
+    <span>Mess Dashboard</span>
   </div>
 </header>
 
 <main class="container">
 
-  <section class="mess-card">
+  <section class="card">
     <h2>Post Surplus Food</h2>
 
     <input type="text" id="foodName" placeholder="Food Name">
     <input type="number" id="quantity" placeholder="Quantity (plates)">
     <input type="datetime-local" id="availableTill">
-    <input type="text" id="location" placeholder="Location">
+    <div class="location-wrapper">
+      <input type="text" id="location" placeholder="Location" readonly>
+      <button class="location-btn" onclick="openMap()">📍</button>
+    </div>
+
+    </div>
 
 
     <button class="primary-btn" onclick="postFood()">Post Food</button>
@@ -37,23 +39,34 @@
     </p>
   </section>
 
-  <section class="mess-card">
+  <section class="card">
     <h2>Previously Posted Food</h2>
      
     <div id="previousFoodList"></div>
-    <div class="mess-card">
-      <b>Rice & Dal</b><br>
-      Quantity: 20 plates<br>
-      Status: <span style="color:green;">Available</span>
-    </div>
     </div>
 
     
 
   </section>
 
+  <!-- ================= MAP MODAL ================= -->
+<div id="mapModal" class="map-modal">
+  <div class="map-modal-content">
+    <div id="map"></div>
+
+    <button class="primary-btn" onclick="useCurrentLocation()">
+      Use Current Location
+    </button>
+
+    <button class="secondary-btn" onclick="closeMap()">
+      Close
+    </button>
+  </div>
+</div>
+
 </main>
-<script type="module" src="app1.js"></script>
+<script type="module" src="app.js"></script>
 <script type="module" src="mess.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 </html>
