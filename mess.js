@@ -6,7 +6,9 @@ import {
   where,
   onSnapshot,
   serverTimestamp,
-  orderBy
+  orderBy,
+  doc,      
+  getDoc     
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 import {
@@ -22,17 +24,58 @@ let selectedLng = null;
 const db = getFirestore();
 const auth = getAuth();
 
+window.selectedDate = null;
+
+function setActiveDateButton(activeId) {
+  document.getElementById("todayBtn")?.classList.remove("active");
+  document.getElementById("tomorrowBtn")?.classList.remove("active");
+  document.getElementById(activeId)?.classList.add("active");
+}
+
+window.setToday = function () {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  window.selectedDate = d;
+  setActiveDateButton("todayBtn");
+};
+
+window.setTomorrow = function () {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  d.setHours(0, 0, 0, 0);
+  window.selectedDate = d;
+  setActiveDateButton("tomorrowBtn");
+};
+
+
+
 /* ================= POST FOOD ================= */
 window.postFood = async function () {
   const foodName = document.getElementById("foodName").value;
   const quantity = document.getElementById("quantity").value;
-  const availableTill = document.getElementById("availableTill").value;
+  const timeValue = document.getElementById("availableTill").value;
   const location = document.getElementById("location").value;
 
-  if (!foodName || !quantity || !availableTill || !location) {
-    alert("Please fill all fields");
-    return;
+if (!timeValue) {
+  alert("Please select time");
+  return;
+}
+
+// selectedDate is set by Today / Tomorrow buttons
+if (!window.selectedDate) {
+  alert("Please select Today or Tomorrow");
+  return;
+}
+
+const [hours, minutes] = timeValue.split(":");
+const availableDateTime = new Date(window.selectedDate);
+availableDateTime.setHours(hours, minutes, 0, 0);
+
+  if (!foodName || !quantity || !location) {
+  alert("Please fill all fields");
+  return;
   }
+
 
   if (!selectedLat || !selectedLng) {
     alert("Please select location from map");
@@ -48,7 +91,8 @@ window.postFood = async function () {
   await addDoc(collection(db, "food_posts"), {
     foodName,
     quantity: Number(quantity),
-    availableTill,
+    availableTill: availableDateTime.toISOString(),
+
     location,
     lat: selectedLat,
     lng: selectedLng,
@@ -104,7 +148,13 @@ const loadPreviousFood = (messId) => {
         Status: <span style="color:${
           food.status === "available" ? "green" : "orange"
         }">${food.status}</span>
-      `;
+        ${
+          food.status === "pickup" && food.pickedByName
+            ? `<br><b>Picked by:</b> ${food.pickedByName}`
+            : ""
+        }
+     `;
+
 
       foodList.appendChild(div);
     });
@@ -112,15 +162,22 @@ const loadPreviousFood = (messId) => {
 };
 
 /* ================= AUTH ================= */
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     window.location.href = "signin.html";
     return;
   }
 
-  // 🔥 THIS ENSURES UID === messId
+  // 🔥 Fetch Mess name
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (snap.exists()) {
+    const name = snap.data().name;
+    document.getElementById("messName").innerText = `Mess/Canteen (${name})`;
+  }
+
   loadPreviousFood(user.uid);
 });
+
 
 window.openMap = function () {
   document.getElementById("mapModal").style.display = "block";
@@ -203,5 +260,9 @@ async function reverseGeocode(lat, lng) {
     return `Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`;
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  setToday();
+});
 
 
