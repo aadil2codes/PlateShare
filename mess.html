@@ -5,6 +5,8 @@
   <title>Mess Dashboard | PlateShare</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 </head>
 <body>
 
@@ -12,7 +14,7 @@
   <div class="logo">🍽 PlateShare</div>
   <div class="header-actions">
     <a href="index.html" class="header-btn">Home</a>
-    <span>Mess Dashboard</span>
+    <span id="messName">Mess/Canteen</span>
   </div>
 </header>
 
@@ -23,7 +25,11 @@
 
     <input type="text" id="foodName" placeholder="Food Name">
     <input type="number" id="quantity" placeholder="Quantity (plates)">
-    <input type="datetime-local" id="availableTill">
+    <div style="display:flex; gap:10px; margin-top: 8px;">
+    <button type="button" class="secondary-btn" id="todayBtn" onclick="setToday()">Today</button>
+    <button type="button" class="secondary-btn" id="tomorrowBtn" onclick="setTomorrow()">Tomorrow</button>
+    </div>
+    <input type="time" id="availableTill">
     <div class="location-wrapper">
       <input type="text" id="location" placeholder="Location" readonly>
       <button class="location-btn" onclick="openMap()">📍</button>
@@ -60,7 +66,7 @@
     </button>
 
     <button class="secondary-btn" onclick="closeMap()">
-      Close
+      Save
     </button>
   </div>
 </div>
@@ -68,8 +74,5 @@
 </main>
 <script type="module" src="app.js"></script>
 <script type="module" src="mess.js"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 </html>
-
-
