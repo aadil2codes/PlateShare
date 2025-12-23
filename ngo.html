@@ -3,44 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>NGO Dashboard | PlateShare</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style1.css">
 </head>
 <body>
 
 <header class="header">
   <div class="logo">🍽 PlateShare</div>
   <div class="header-actions">
-    <a href="index.html" class="header-btn">Home</a>
+    <span>NGO Dashboard</span>
   </div>
 </header>
 
 <main class="container">
 
-  <section class="ngo-card">
+  <section class="card">
     <h2>Available Food Nearby</h2>
 
     <div id="ngoFoodList"></div>
 
-    <div class="food-card">
-      <b>Rice & Dal</b><br>
-      Quantity: 20 plates<br>
-      Location: College Mess A<br>
-      Time left: 1 hour<br><br>
-      <button class="primary-btn">Accept Pickup</button>
-    </div>
-
-    <div class="food-card">
-      <b>Vegetable Khichdi</b><br>
-      Quantity: 12 plates<br>
-      Location: Hostel Canteen<br>
-      Time left: 45 minutes<br><br>
-      <button class="primary-btn">Accept Pickup</button>
     </div>
 
   </section>
 
   <section class="card">
     <h2>Pickup Status</h2>
+
+    <div id="pickupFoodList"></div>
 
     <div class="food-card">
       <b>Chapati Sabzi</b><br>
@@ -49,7 +37,7 @@
   </section>
 
 </main>
-<script type="module" src="app1.js"></script>
+<script type="module" src="app.js"></script>
 <script type="module" src="ngo.js"></script>
 </body>
 </html>
