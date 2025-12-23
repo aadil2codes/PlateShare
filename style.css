@@ -383,3 +383,51 @@ a.hero-btn:visited {
   text-decoration: none;
 }
 
+/* ================= MAP LOCATION PICKER ================= */
+
+.location-wrapper {
+  position: relative;
+}
+
+.location-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.map-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.map-modal-content {
+  background: white;
+  width: 90%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#map {
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+
+#foodMap {
+  height: 350px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
