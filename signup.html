@@ -24,11 +24,18 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
 
-    <select id="role">
-      <option value="">Select Role</option>
-      <option value="mess">Mess</option>
-      <option value="ngo">NGO</option>
-    </select>
+    <div class="role-group">
+      <label class="role-option">
+        <input type="radio" name="role" value="mess">
+        <span>Mess / Canteen</span>
+      </label>
+
+      <label class="role-option">
+        <input type="radio" name="role" value="ngo">
+        <span>NGO / Volunteer</span>
+      </label>
+    </div>
+
 
     <button class="primary-btn" onclick="signup()">Sign Up</button>
 
@@ -42,4 +49,3 @@
 <script type="module" src="app.js"></script>
 </body>
 </html>
-
