@@ -38,7 +38,10 @@
     </div>
 
 
-    <button class="primary-btn" onclick="postFood()">Post Food</button>
+    <button class="primary-btn" onclick="openConfirmPost()">
+      Post Food
+    </button>
+
 
 
     <p style="margin-top:10px;color:#6b7280;">
@@ -70,6 +73,26 @@
     </button>
   </div>
 </div>
+
+<!-- ================= CONFIRM POST FOOD ================= -->
+<div id="confirmPostModal" class="map-modal">
+  <div class="map-modal-content">
+    <h3>Confirm Food Post</h3>
+
+    <p><b>Food:</b> <span id="cFood"></span></p>
+    <p><b>Quantity:</b> <span id="cQty"></span></p>
+    <p><b>Available Till:</b> <span id="cTime"></span></p>
+    <p><b>Location:</b> <span id="cLoc"></span></p>
+
+    <button class="primary-btn" onclick="confirmPostFood()">
+      Confirm Post
+    </button>
+    <button class="secondary-btn" onclick="closeConfirmPost()">
+      Cancel
+    </button>
+  </div>
+</div>
+
 
 </main>
 <script type="module" src="app.js"></script>
