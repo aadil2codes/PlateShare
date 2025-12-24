@@ -65,12 +65,14 @@ function loadFoodMarkers() {
       if (!food.lat || !food.lng) return;
 
       const marker = L.marker([food.lat, food.lng])
-        .addTo(foodMap)
-        .bindPopup(`
-          <b>${food.foodName}</b><br>
-          Quantity: ${food.quantity}<br>
-          ${food.location}
-        `);
+  .addTo(foodMap)
+  .bindPopup(`
+    <b>${food.foodName}</b><br>
+    Quantity: ${food.quantity} plates<br>
+    Location: ${food.location}<br>
+    <b>Available till:</b> ${formatDateTime(food.availableTill)}
+  `);
+
 
       foodMarkers.push(marker);
     });
@@ -189,25 +191,21 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-function formatDateTime(date) {
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 16);
+
+
+function formatDateTime(ts) {
+  if (!ts) return "";
+
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
 }
-
-window.setToday = function () {
-  const input = document.getElementById("availableTill");
-  const now = new Date();
-  input.value = formatDateTime(now);
-  input.min = formatDateTime(now);
-};
-
-window.setTomorrow = function () {
-  const input = document.getElementById("availableTill");
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  input.value = formatDateTime(tomorrow);
-  input.min = formatDateTime(new Date());
-};
 
 
