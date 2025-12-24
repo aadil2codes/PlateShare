@@ -91,8 +91,7 @@ availableDateTime.setHours(hours, minutes, 0, 0);
   await addDoc(collection(db, "food_posts"), {
     foodName,
     quantity: Number(quantity),
-    availableTill: availableDateTime.toISOString(),
-
+    availableTill: new Date(availableDateTime),
     location,
     lat: selectedLat,
     lng: selectedLng,
@@ -184,28 +183,30 @@ window.openMap = function () {
 
   setTimeout(() => {
     if (!map) {
-      map = L.map("map").setView([20.5937, 78.9629], 5); // India default
+      map = L.map("map").setView([20.5937, 78.9629], 5);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap"
       }).addTo(map);
 
       map.on("click", async (e) => {
-         if (marker) map.removeLayer(marker);
+        if (marker) map.removeLayer(marker);
 
-         selectedLat = e.latlng.lat;
-         selectedLng = e.latlng.lng;
+        selectedLat = e.latlng.lat;
+        selectedLng = e.latlng.lng;
 
-         marker = L.marker([selectedLat, selectedLng]).addTo(map);
+        marker = L.marker([selectedLat, selectedLng]).addTo(map);
 
-         const address = await reverseGeocode(selectedLat, selectedLng);
-         document.getElementById("location").value = address;
+        const address = await reverseGeocode(selectedLat, selectedLng);
+        document.getElementById("location").value = address;
       });
-
-
     }
+
+    // 🔥 REQUIRED
+    map.invalidateSize();
   }, 300);
 };
+
 
 window.closeMap = function () {
   document.getElementById("mapModal").style.display = "none";
@@ -266,3 +267,52 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+window.openConfirmPost = function () {
+  const foodName = document.getElementById("foodName").value;
+  const quantity = document.getElementById("quantity").value;
+  const timeValue = document.getElementById("availableTill").value;
+  const location = document.getElementById("location").value;
+
+  if (!window.selectedDate || !timeValue) {
+  alert("Please select date and time");
+  return;
+}
+
+  const [hours, minutes] = timeValue.split(":");
+const fullDateTime = new Date(window.selectedDate);
+fullDateTime.setHours(hours, minutes, 0, 0);
+
+  if (!foodName || !quantity || !location) {
+  alert("Please complete all fields");
+  return;
+}
+
+
+  document.getElementById("cFood").innerText = foodName;
+  document.getElementById("cQty").innerText = quantity;
+  document.getElementById("cTime").innerText =
+  formatDateTime(fullDateTime);
+  document.getElementById("cLoc").innerText = location;
+
+  document.getElementById("confirmPostModal").style.display = "block";
+};
+
+window.closeConfirmPost = function () {
+  document.getElementById("confirmPostModal").style.display = "none";
+};
+
+window.confirmPostFood = function () {
+  closeConfirmPost();
+  postFood(); // 🔥 your existing function
+};
+
+function formatDateTime(date) {
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+}
