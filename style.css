@@ -545,3 +545,232 @@ a.hero-btn:visited {
   font-size: 13px;     
   margin-left: 0;        
 }
+
+/* ================= AI ASSISTANT ================= */
+
+.ai-btn {
+  margin-top: 15px;
+  background: #ffffff;
+  color: #3b552d;
+  border: 2px solid #2e7d32;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ai-btn:hover {
+  background: #e8f5e9;
+}
+
+.ai-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+}
+
+.ai-modal-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.ai-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.chat-area {
+  margin-top: 15px;
+}
+
+.chat-messages {
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.chat-messages p {
+  margin-bottom: 8px;
+}
+
+.close-ai {
+  margin-top: 15px;
+}
+
+/* ================= FLOATING AI BUTTON ================= */
+
+.ai-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #1d2e1d;
+  color: white;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* 🔥 JUMP ANIMATION */
+  animation: aiJump 0.8s ease-in-out infinite;
+}
+
+
+
+
+/* ================= AI BUTTON JUMP ANIMATION ================= */
+
+@keyframes aiJump {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-8px);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+
+
+.ai-fab:hover {
+  animation-play-state: paused;
+  transform: translateY(-10px) scale(1.1);
+}
+
+
+.ai-fab:active {
+  transform: scale(0.95);
+}
+
+/* ================= VOICE FOOD POST BUTTON ================= */
+
+
+.voice-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;          /* ✅ moved to bottom-right */
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voice-fab:hover {
+  background: #1b5e20;
+}
+
+
+/* ================= VOICE CANCEL BUTTON ================= */
+
+.voice-cancel {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;      /* ✅ align with voice button */
+  background: #ffffff;
+  color: #b71c1c;
+  border: 2px solid #b71c1c;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1200;
+}
+
+
+.voice-cancel:hover {
+  background: #fdecea;
+}
+
+/* ================= VOICE BUTTON ================= */
+.voice-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1200;
+}
+
+/* ================= VOICE MODAL ================= */
+.voice-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  display: none;          /* ✅ DEFAULT HIDDEN */
+}
+
+.voice-modal.show {
+  display: flex;          /* ✅ ONLY when active */
+}
+
+.voice-modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  width: 260px;
+}
+
+.mic-icon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.voice-cancel-btn {
+  margin-top: 15px;
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
