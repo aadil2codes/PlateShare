@@ -1,318 +1,232 @@
 import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  where,
-  onSnapshot,
-  serverTimestamp,
-  orderBy,
-  doc,      
-  getDoc     
+  getFirestore, collection, addDoc, query, where,
+  onSnapshot, serverTimestamp, orderBy, doc, getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+const db = getFirestore();
+const auth = getAuth();
 
 let map, marker;
 let selectedLat = null;
 let selectedLng = null;
 
 
-const db = getFirestore();
-const auth = getAuth();
-
 window.selectedDate = null;
 
-function setActiveDateButton(activeId) {
-  document.getElementById("todayBtn")?.classList.remove("active");
-  document.getElementById("tomorrowBtn")?.classList.remove("active");
-  document.getElementById(activeId)?.classList.add("active");
+/* ================= DATE ================= */
+function setActiveDateButton(id) {
+  ["todayBtn", "tomorrowBtn"].forEach(b => {
+    document.getElementById(b)?.classList.remove("active");
+  });
+  document.getElementById(id)?.classList.add("active");
 }
 
-window.setToday = function () {
+window.setToday = () => {
   const d = new Date();
-  d.setHours(0, 0, 0, 0);
+  d.setHours(0,0,0,0);
   window.selectedDate = d;
   setActiveDateButton("todayBtn");
 };
 
-window.setTomorrow = function () {
+window.setTomorrow = () => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
-  d.setHours(0, 0, 0, 0);
+  d.setHours(0,0,0,0);
   window.selectedDate = d;
   setActiveDateButton("tomorrowBtn");
 };
 
-
+/* ================= AUTH ================= */
+onAuthStateChanged(auth, async user => {
+  if (!user) return location.href = "signin.html";
+  const snap = await getDoc(doc(db, "users", user.uid));
+  if (snap.exists()) {
+    document.getElementById("messName").innerText =
+      `Mess/Canteen (${snap.data().name})`;
+  }
+  loadPreviousFood(user.uid);
+});
 
 /* ================= POST FOOD ================= */
-window.postFood = async function () {
-  const foodName = document.getElementById("foodName").value;
-  const quantity = document.getElementById("quantity").value;
-  const timeValue = document.getElementById("availableTill").value;
-  const location = document.getElementById("location").value;
+window.postFood = async () => {
+  const foodName = foodNameInput.value;
+  const quantity = quantityInput.value;
+  const timeValue = availableTill.value;
+  const location = locationInput.value;
 
-if (!timeValue) {
-  alert("Please select time");
-  return;
-}
+  if (!foodName || !quantity || !timeValue || !location || !window.selectedDate)
+    return alert("Please complete all fields");
 
-// selectedDate is set by Today / Tomorrow buttons
-if (!window.selectedDate) {
-  alert("Please select Today or Tomorrow");
-  return;
-}
-
-const [hours, minutes] = timeValue.split(":");
-const availableDateTime = new Date(window.selectedDate);
-availableDateTime.setHours(hours, minutes, 0, 0);
-
-  if (!foodName || !quantity || !location) {
-  alert("Please fill all fields");
-  return;
-  }
-
-
-  if (!selectedLat || !selectedLng) {
-    alert("Please select location from map");
-    return;
-  }
-
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Not logged in");
-    return;
-  }
+  const [h, m] = timeValue.split(":");
+  const dt = new Date(window.selectedDate);
+  dt.setHours(h, m, 0, 0);
 
   await addDoc(collection(db, "food_posts"), {
     foodName,
     quantity: Number(quantity),
-    availableTill: new Date(availableDateTime),
+    availableTill: dt,
     location,
     lat: selectedLat,
     lng: selectedLng,
-    messId: user.uid,
+    messId: auth.currentUser.uid,
     status: "available",
     createdAt: serverTimestamp()
   });
 
-  // Clear form
-  document.getElementById("foodName").value = "";
-  document.getElementById("quantity").value = "";
-  document.getElementById("availableTill").value = "";
-  document.getElementById("location").value = "";
-
-  selectedLat = null;
-  selectedLng = null;
+  foodNameInput.value = quantityInput.value =
+  availableTill.value = locationInput.value = "";
 };
 
-
-/* ================= LOAD PREVIOUS FOOD ================= */
-const loadPreviousFood = (messId) => {
-  const foodList = document.getElementById("previousFoodList");
-
-  if (!foodList) {
-    console.error("previousFoodList div not found");
-    return;
-  }
-
+/* ================= LOAD PREVIOUS ================= */
+function loadPreviousFood(id) {
   const q = query(
     collection(db, "food_posts"),
-    where("messId", "==", messId),
+    where("messId", "==", id),
     orderBy("createdAt", "desc")
   );
 
-  onSnapshot(q, (snapshot) => {
-    foodList.innerHTML = "";
-
-    if (snapshot.empty) {
-      foodList.innerHTML = "<p>No food posted yet.</p>";
-      return;
-    }
-
-    snapshot.forEach((doc) => {
-      const food = doc.data();
-
-      const div = document.createElement("div");
-      div.className = "food-card";
-
-      div.innerHTML = `
-        <b>${food.foodName}</b><br>
-        Quantity: ${food.quantity} plates<br>
-        Location: ${food.location}<br>
-        Status: <span style="color:${
-          food.status === "available" ? "green" : "orange"
-        }">${food.status}</span>
-        ${
-          food.status === "pickup" && food.pickedByName
-            ? `<br><b>Picked by:</b> ${food.pickedByName}`
-            : ""
-        }
-     `;
-
-
-      foodList.appendChild(div);
+  onSnapshot(q, snap => {
+    previousFoodList.innerHTML = "";
+    snap.forEach(d => {
+      previousFoodList.innerHTML += `
+        <div class="food-card">
+          <b>${d.data().foodName}</b><br>
+          ${d.data().quantity} plates<br>
+          ${d.data().location}
+        </div>`;
     });
   });
-};
+}
 
-/* ================= AUTH ================= */
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "signin.html";
+/* ================= VOICE FOOD POST ================= */
+
+let voiceData = {};
+let voiceRecognition = null;
+let isVoiceActive = false;
+
+window.startVoiceFoodPost = function () {
+  if (!("webkitSpeechRecognition" in window)) {
+    alert("Voice input not supported");
     return;
   }
 
-  // 🔥 Fetch Mess name
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (snap.exists()) {
-    const name = snap.data().name;
-    document.getElementById("messName").innerText = `Mess/Canteen (${name})`;
+  // 🔥 hard reset
+  cancelVoiceFoodPost();
+
+  voiceRecognition = new webkitSpeechRecognition();
+  const rec = voiceRecognition;
+  isVoiceActive = true;
+
+  rec.lang = "en-IN";
+  rec.continuous = false;
+  rec.interimResults = false;
+
+  rec.onresult = async (e) => {
+    if (!isVoiceActive) return;
+
+    const speech = e.results[0][0].transcript.toLowerCase();
+    console.log("Voice:", speech);
+
+    extractVoiceData(speech);
+    await handleMissingVoiceData();
+
+    cancelVoiceFoodPost(); // ✅ auto-close after success
+  };
+
+  rec.onerror = () => {
+    cancelVoiceFoodPost();
+  };
+
+  rec.onend = () => {
+    cancelVoiceFoodPost();
+  };
+
+  openVoiceModal();
+  rec.start();
+};
+
+
+
+function extractVoiceData(text) {
+  if (text.includes("tomorrow")) setTomorrow();
+  if (text.includes("today")) setToday();
+
+  const food = text.match(/foods? are (.+)/);
+  if (food) voiceData.foodName = food[1];
+
+  const qty = text.match(/(\d+)\s*(plate|plates)/);
+  if (qty) voiceData.quantity = qty[1];
+
+  const time = text.match(/(\d+)\s*(am|pm)/);
+  if (time) {
+    let h = +time[1];
+    if (time[2] === "pm" && h < 12) h += 12;
+    voiceData.time = `${h}:00`;
   }
 
-  loadPreviousFood(user.uid);
+  if (text.includes("current location")) useCurrentLocation();
+}
+
+async function handleMissingVoiceData() {
+  if (!voiceData.foodName) voiceData.foodName = prompt("Food name?");
+  if (!voiceData.quantity) voiceData.quantity = prompt("Quantity?");
+  if (!voiceData.time) voiceData.time = prompt("Available till (HH:MM)?");
+  if (!locationInput.value) return openMap();
+  fillFormFromVoice();
+}
+
+function fillFormFromVoice() {
+  foodNameInput.value = voiceData.foodName;
+  quantityInput.value = voiceData.quantity;
+  availableTill.value = voiceData.time;
+  openConfirmPost();
+}
+
+/* ================= VOICE MODAL ================= */
+function openVoiceModal() {
+  document.getElementById("voiceModal").classList.add("show");
+}
+
+function closeVoiceModal() {
+  document.getElementById("voiceModal").classList.remove("show");
+}
+
+
+window.cancelVoiceFoodPost = function () {
+  if (!isVoiceActive) return;
+
+  isVoiceActive = false;
+
+  // 🔥 hide modal FIRST
+  closeVoiceModal();
+
+  // 🔥 kill recognition safely
+  if (voiceRecognition) {
+    voiceRecognition.onresult = null;
+    voiceRecognition.onerror = null;
+    voiceRecognition.onend = null;
+
+    try {
+      voiceRecognition.stop();
+    } catch (e) {}
+
+    voiceRecognition = null;
+  }
+
+  // 🔥 reset data
+  voiceData = {};
+  console.log("🎤 Voice input cancelled");
+};
+
+
+document.querySelector(".voice-modal-content").addEventListener("click", e => {
+  e.stopPropagation();
 });
 
-
-window.openMap = function () {
-  document.getElementById("mapModal").style.display = "block";
-
-  setTimeout(() => {
-    if (!map) {
-      map = L.map("map").setView([20.5937, 78.9629], 5);
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap"
-      }).addTo(map);
-
-      map.on("click", async (e) => {
-        if (marker) map.removeLayer(marker);
-
-        selectedLat = e.latlng.lat;
-        selectedLng = e.latlng.lng;
-
-        marker = L.marker([selectedLat, selectedLng]).addTo(map);
-
-        const address = await reverseGeocode(selectedLat, selectedLng);
-        document.getElementById("location").value = address;
-      });
-    }
-
-    // 🔥 REQUIRED
-    map.invalidateSize();
-  }, 300);
-};
-
-
-window.closeMap = function () {
-  document.getElementById("mapModal").style.display = "none";
-};
-
-window.useCurrentLocation = function () {
-  if (!navigator.geolocation) {
-    alert("Geolocation not supported");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    selectedLat = pos.coords.latitude;
-    selectedLng = pos.coords.longitude;
-
-    if (marker) map.removeLayer(marker);
-
-    marker = L.marker([selectedLat, selectedLng]).addTo(map);
-    map.setView([selectedLat, selectedLng], 15);
-
-    const address = await reverseGeocode(selectedLat, selectedLng);
-    document.getElementById("location").value = address;
-  });
-};
-
-async function reverseGeocode(lat, lng) {
-  try {
-    const res = await fetch(
-      `https://photon.komoot.io/reverse?lat=${lat}&lon=${lng}`
-    );
-
-    const data = await res.json();
-
-    if (!data.features || data.features.length === 0) {
-      return `Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`;
-    }
-
-    const p = data.features[0].properties;
-
-    // Build clean plain-text address
-    const parts = [
-      p.name,
-      p.street,
-      p.city,
-      p.state,
-      p.country
-    ].filter(Boolean);
-
-    return parts.join(", ");
-  } catch (err) {
-    console.error("Reverse geocoding failed:", err);
-    return `Lat ${lat.toFixed(5)}, Lng ${lng.toFixed(5)}`;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  setToday();
+document.getElementById("voiceModal").addEventListener("click", () => {
+  cancelVoiceFoodPost();
 });
 
-
-window.openConfirmPost = function () {
-  const foodName = document.getElementById("foodName").value;
-  const quantity = document.getElementById("quantity").value;
-  const timeValue = document.getElementById("availableTill").value;
-  const location = document.getElementById("location").value;
-
-  if (!window.selectedDate || !timeValue) {
-  alert("Please select date and time");
-  return;
-}
-
-  const [hours, minutes] = timeValue.split(":");
-const fullDateTime = new Date(window.selectedDate);
-fullDateTime.setHours(hours, minutes, 0, 0);
-
-  if (!foodName || !quantity || !location) {
-  alert("Please complete all fields");
-  return;
-}
-
-
-  document.getElementById("cFood").innerText = foodName;
-  document.getElementById("cQty").innerText = quantity;
-  document.getElementById("cTime").innerText =
-  formatDateTime(fullDateTime);
-  document.getElementById("cLoc").innerText = location;
-
-  document.getElementById("confirmPostModal").style.display = "block";
-};
-
-window.closeConfirmPost = function () {
-  document.getElementById("confirmPostModal").style.display = "none";
-};
-
-window.confirmPostFood = function () {
-  closeConfirmPost();
-  postFood(); // 🔥 your existing function
-};
-
-function formatDateTime(date) {
-  return date.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  });
-}
