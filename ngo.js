@@ -50,13 +50,23 @@ const loadAvailableFood = () => {
       div.className = "food-card";
 
       div.innerHTML = `
-        <b>${food.foodName}</b><br>
-        Quantity: ${food.quantity}<br>
-        Location: ${food.location}<br><br>
-        <button class="primary-btn" onclick="acceptPickup('${foodId}')">
-          Accept Pickup
-        </button>
-      `;
+  <b>${food.foodName}</b><br>
+  Quantity: ${food.quantity} plates<br>
+  Location: ${food.location}<br>
+  <b>Available till:</b> ${formatDateTime(food.availableTill)}<br><br>
+
+  <button class="primary-btn"
+    onclick="openConfirmAccept(
+      '${foodId}',
+      '${food.foodName}',
+      '${food.quantity}',
+      '${food.location}',
+      '${food.availableTill}'
+    )">
+    Accept Pickup
+  </button>
+`;
+
 
       foodList.appendChild(div);
     });
@@ -89,11 +99,13 @@ const loadMyPickups = (ngoId) => {
       div.className = "food-card";
 
       div.innerHTML = `
-        <b>${food.foodName}</b><br>
-        Quantity: ${food.quantity}<br>
-        Location: ${food.location}<br>
-        <b>Status:</b> Pickup Accepted
-      `;
+  <b>${food.foodName}</b><br>
+  Quantity: ${food.quantity} plates<br>
+  Location: ${food.location}<br>
+  <b>Available till:</b> ${formatDateTime(food.availableTill)}<br>
+  <b>Status:</b> Picked
+`;
+;
 
       pickupList.appendChild(div);
     });
@@ -174,21 +186,69 @@ function loadFoodMarkersOnMap() {
       const marker = L.marker([food.lat, food.lng])
         .addTo(ngoMap)
         .bindPopup(`
-        <b>${food.foodName}</b><br>
-        Quantity: ${food.quantity}<br>
-        ${food.location}<br><br>
+  <b>${food.foodName}</b><br>
+  Quantity: ${food.quantity} plates<br>
+  Location: ${food.location}<br>
+  <b>Available till:</b> ${formatDateTime(food.availableTill)}<br><br>
 
-        <button
-        class="primary-btn"
-        style="width:100%;"
-        onclick="acceptPickup('${docSnap.id}')"
-        >
-        Accept Food
-        </button>
-      `);
+  <button
+    class="primary-btn"
+    style="width:100%;"
+    onclick="openConfirmAccept(
+      '${docSnap.id}',
+      '${food.foodName}',
+      '${food.quantity}',
+      '${food.location}',
+      '${food.availableTill}'
+    )"
+  >
+    Accept Food
+  </button>
+`);
+
 
 
       ngoMarkers.push(marker);
     });
+  });
+}
+
+let pendingFoodId = null;
+
+window.openConfirmAccept = function (id, name, qty, loc, till) {
+  pendingFoodId = id;
+
+  document.getElementById("aFood").innerText = name;
+  document.getElementById("aQty").innerText = qty;
+  document.getElementById("aLoc").innerText = loc;
+  document.getElementById("aTime").innerText = formatDateTime(till);
+
+  document.getElementById("confirmAcceptModal").style.display = "block";
+};
+
+
+window.closeConfirmAccept = function () {
+  pendingFoodId = null;
+  document.getElementById("confirmAcceptModal").style.display = "none";
+};
+
+window.confirmAcceptFood = function () {
+  if (!pendingFoodId) return;
+  acceptPickup(pendingFoodId);
+  closeConfirmAccept();
+};
+
+function formatDateTime(ts) {
+  if (!ts) return "";
+
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+
+  return date.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
   });
 }
