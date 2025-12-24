@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Mess Dashboard | PlateShare</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 </head>
 <body>
 
@@ -25,76 +25,66 @@
 
     <input type="text" id="foodName" placeholder="Food Name">
     <input type="number" id="quantity" placeholder="Quantity (plates)">
-    <div style="display:flex; gap:10px; margin-top: 8px;">
-    <button type="button" class="secondary-btn" id="todayBtn" onclick="setToday()">Today</button>
-    <button type="button" class="secondary-btn" id="tomorrowBtn" onclick="setTomorrow()">Tomorrow</button>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button type="button" class="secondary-btn" id="todayBtn" onclick="setToday()">Today</button>
+      <button type="button" class="secondary-btn" id="tomorrowBtn" onclick="setTomorrow()">Tomorrow</button>
     </div>
+
     <input type="time" id="availableTill">
+
     <div class="location-wrapper">
       <input type="text" id="location" placeholder="Location" readonly>
       <button class="location-btn" onclick="openMap()">📍</button>
     </div>
 
-    </div>
-
-
-    <button class="primary-btn" onclick="openConfirmPost()">
-      Post Food
-    </button>
-
-
-
-    <p style="margin-top:10px;color:#6b7280;">
-      ➜ Food will be marked as <b>AVAILABLE</b>
-    </p>
+    <button class="primary-btn" onclick="openConfirmPost()">Post Food</button>
   </section>
 
   <section class="card">
     <h2>Previously Posted Food</h2>
-     
     <div id="previousFoodList"></div>
-    </div>
-
-    
-
   </section>
 
-  <!-- ================= MAP MODAL ================= -->
+</main>
+
+<!-- MAP MODAL -->
 <div id="mapModal" class="map-modal">
   <div class="map-modal-content">
     <div id="map"></div>
-
-    <button class="primary-btn" onclick="useCurrentLocation()">
-      Use Current Location
-    </button>
-
-    <button class="secondary-btn" onclick="closeMap()">
-      Save
-    </button>
+    <button class="primary-btn" onclick="useCurrentLocation()">Use Current Location</button>
+    <button class="secondary-btn" onclick="closeMap()">Save</button>
   </div>
 </div>
 
-<!-- ================= CONFIRM POST FOOD ================= -->
+<!-- CONFIRM POST MODAL -->
 <div id="confirmPostModal" class="map-modal">
   <div class="map-modal-content">
     <h3>Confirm Food Post</h3>
-
     <p><b>Food:</b> <span id="cFood"></span></p>
     <p><b>Quantity:</b> <span id="cQty"></span></p>
     <p><b>Available Till:</b> <span id="cTime"></span></p>
     <p><b>Location:</b> <span id="cLoc"></span></p>
 
-    <button class="primary-btn" onclick="confirmPostFood()">
-      Confirm Post
-    </button>
-    <button class="secondary-btn" onclick="closeConfirmPost()">
-      Cancel
-    </button>
+    <button class="primary-btn" onclick="confirmPostFood()">Confirm Post</button>
+    <button class="secondary-btn" onclick="closeConfirmPost()">Cancel</button>
   </div>
 </div>
 
+<!-- 🎤 VOICE RECORDING MODAL -->
+<div id="voiceModal" class="voice-modal">
+  <div class="voice-modal-content">
+    <div class="mic-icon">🎤</div>
+    <p class="recording-text">Recording…</p>
+    <button class="voice-cancel-btn" onclick="cancelVoiceFoodPost()">Cancel</button>
+  </div>
+</div>
 
-</main>
+<!-- 🎤 VOICE BUTTON -->
+<button class="voice-fab" onclick="startVoiceFoodPost()" title="Post food using voice">
+  🎤
+</button>
+
 <script type="module" src="app.js"></script>
 <script type="module" src="mess.js"></script>
 </body>
