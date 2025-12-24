@@ -16,6 +16,7 @@
   href="https://unpkg.com/leaflet/dist/leaflet.css"
 />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="gemini-ai.js"></script>
 
   <!-- Firebase (optional – safe to keep) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
@@ -111,7 +112,46 @@
     </div>
   </section>
 
+
+
 </main>
+
+<button class="ai-fab" onclick="openAIAssistant()" title="Ask PlateShare AI">
+  🤖
+</button>
+
+<!-- ================= AI ASSISTANT MODAL ================= -->
+<div id="aiModal" class="ai-modal">
+  <div class="ai-modal-content">
+    <h2>🤖 PlateShare AI Assistant</h2>
+    <p>
+      I can explain how PlateShare works and answer any questions about the app.
+      Choose how you want to talk:
+    </p>
+
+    <div class="ai-options">
+      <button class="primary-btn" onclick="startChat()">💬 Chat</button>
+      <button class="secondary-btn" onclick="startVoice()">🎤 Voice</button>
+    </div>
+
+    <!-- Chat Area -->
+    <div id="chatArea" class="chat-area hidden">
+      <div id="chatMessages" class="chat-messages"></div>
+      <input
+        type="text"
+        id="chatInput"
+        placeholder="Ask something about PlateShare..."
+        onkeydown="if(event.key==='Enter') sendChat()"
+      />
+      <button class="primary-btn" onclick="sendChat()">Send</button>
+    </div>
+
+    <button class="secondary-btn close-ai" onclick="closeAIAssistant()">
+      Close
+    </button>
+  </div>
+</div>
+
 
 <script type="module" src="app.js"></script>
 </body>
