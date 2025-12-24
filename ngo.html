@@ -49,6 +49,27 @@
     </div>
   </div>
 
+  <!-- ================= CONFIRM ACCEPT FOOD ================= -->
+<div id="confirmAcceptModal" class="map-modal">
+  <div class="map-modal-content">
+    <h3>Confirm Pickup</h3>
+
+    <p><b>Food:</b> <span id="aFood"></span></p>
+    <p><b>Quantity:</b> <span id="aQty"></span></p>
+    <p><b>Location:</b> <span id="aLoc"></span></p>
+    <p><b>Available till:</b> <span id="aTime"></span></p>
+
+
+    <button class="primary-btn" onclick="confirmAcceptFood()">
+      Confirm Pickup
+    </button>
+    <button class="secondary-btn" onclick="closeConfirmAccept()">
+      Cancel
+    </button>
+  </div>
+</div>
+
+
 </main>
 
 <script type="module" src="app.js"></script>
