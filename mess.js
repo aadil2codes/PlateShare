@@ -279,11 +279,6 @@ window.openMap = function () {
 window.closeMap = function () {
   document.getElementById("mapModal").style.display = "none";
 
-
-  if (selectedLat && selectedLng) {
-    document.getElementById("location").value =
-      `Lat: ${selectedLat.toFixed(5)}, Lng: ${selectedLng.toFixed(5)}`;
-  }
 };
 
 window.useCurrentLocation = function () {
@@ -310,6 +305,26 @@ window.useCurrentLocation = function () {
     alert("Location access denied");
   });
 };
+
+window.openConfirmPost = function () {
+  document.getElementById("confirmPostModal").style.display = "block";
+
+  document.getElementById("cFood").innerText = foodNameInput.value;
+  document.getElementById("cQty").innerText = quantityInput.value;
+  document.getElementById("cTime").innerText = availableTill.value;
+  document.getElementById("cLoc").innerText = locationInput.value;
+};
+
+window.closeConfirmPost = function () {
+  document.getElementById("confirmPostModal").style.display = "none";
+};
+
+window.confirmPostFood = function () {
+  closeConfirmPost();
+  postFood();
+};
+
+
 
 
 
