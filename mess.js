@@ -230,3 +230,59 @@ document.getElementById("voiceModal").addEventListener("click", () => {
   cancelVoiceFoodPost();
 });
 
+/* ================= MAP LOCATION PICKER ================= */
+
+window.openMap = function () {
+  document.getElementById("mapModal").style.display = "block";
+
+  setTimeout(() => {
+    if (!map) {
+      map = L.map("map").setView([20.5937, 78.9629], 5);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap"
+      }).addTo(map);
+
+      map.on("click", function (e) {
+        selectedLat = e.latlng.lat;
+        selectedLng = e.latlng.lng;
+
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([selectedLat, selectedLng]).addTo(map);
+      });
+    }
+
+    map.invalidateSize(); // 🔥 IMPORTANT
+  }, 200);
+};
+
+window.closeMap = function () {
+  document.getElementById("mapModal").style.display = "none";
+
+  if (selectedLat && selectedLng) {
+    document.getElementById("location").value =
+      `Lat: ${selectedLat.toFixed(5)}, Lng: ${selectedLng.toFixed(5)}`;
+  }
+};
+
+window.useCurrentLocation = function () {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    selectedLat = pos.coords.latitude;
+    selectedLng = pos.coords.longitude;
+
+    if (marker) map.removeLayer(marker);
+    marker = L.marker([selectedLat, selectedLng]).addTo(map);
+
+    map.setView([selectedLat, selectedLng], 16);
+  }, () => {
+    alert("Location access denied");
+  });
+};
+
+
+
