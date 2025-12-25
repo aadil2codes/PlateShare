@@ -246,12 +246,13 @@ input, select {
 
 
 .secondary-btn {
-  background: #eeeeee;
+  background: #2e7d32;
+  colour: white
   border: none;
   padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
-  margin-left: 10px;
+  margin: 10px 0px;
 }
 
 .secondary-btn a{
@@ -846,3 +847,4 @@ a.hero-btn:visited {
 
 
 /* ================= MESS DASHBOARD LAYOUT ================= */
+
