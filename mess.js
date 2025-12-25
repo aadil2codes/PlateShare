@@ -232,8 +232,23 @@ document.getElementById("voiceModal").addEventListener("click", () => {
 
 /* ================= MAP LOCATION PICKER ================= */
 
+async function reverseGeocode(lat, lng) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+    );
+    const data = await res.json();
+
+    return data.display_name || "Selected location";
+  } catch (err) {
+    console.error("Reverse geocoding failed", err);
+    return "Selected location";
+  }
+}
+
+
 window.openMap = function () {
-  document.getElementById("mapModal").style.display = "block";
+  document.getElementById("mapModal").style.display = "none";
 
   setTimeout(() => {
     if (!map) {
@@ -243,13 +258,17 @@ window.openMap = function () {
         attribution: "© OpenStreetMap"
       }).addTo(map);
 
-      map.on("click", function (e) {
-        selectedLat = e.latlng.lat;
-        selectedLng = e.latlng.lng;
+      map.on("click", async function (e) {
+  selectedLat = e.latlng.lat;
+  selectedLng = e.latlng.lng;
 
-        if (marker) map.removeLayer(marker);
-        marker = L.marker([selectedLat, selectedLng]).addTo(map);
-      });
+  if (marker) map.removeLayer(marker);
+  marker = L.marker([selectedLat, selectedLng]).addTo(map);
+
+  const address = await reverseGeocode(selectedLat, selectedLng);
+  document.getElementById("location").value = address;
+});
+
     }
 
     map.invalidateSize(); // 🔥 IMPORTANT
@@ -271,7 +290,7 @@ window.useCurrentLocation = function () {
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(pos => {
+  navigator.geolocation.getCurrentPosition(async pos => {
     selectedLat = pos.coords.latitude;
     selectedLng = pos.coords.longitude;
 
@@ -279,10 +298,15 @@ window.useCurrentLocation = function () {
     marker = L.marker([selectedLat, selectedLng]).addTo(map);
 
     map.setView([selectedLat, selectedLng], 16);
+
+    const address = await reverseGeocode(selectedLat, selectedLng);
+    document.getElementById("location").value = address;
   }, () => {
     alert("Location access denied");
   });
 };
+
+
 
 
 
