@@ -117,6 +117,11 @@ body {
   transform: translateY(-1px);
 }
 
+#login-btn{
+  background-color: black;
+  color: white;
+}
+
 /* ================= HOW IT WORKS ================= */
 .how-it-works {
   padding: 80px 40px;
@@ -871,6 +876,7 @@ a.hero-btn:visited {
   margin-bottom: 4px;
   color: #374151;
 }
+
 
 
 
