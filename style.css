@@ -773,4 +773,8 @@ a.hero-btn:visited {
   border-radius: 6px;
   cursor: pointer;
 }
+#confirmPostModal {
+  z-index: 1200;
+}
+
 
