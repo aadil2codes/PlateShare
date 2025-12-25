@@ -778,3 +778,71 @@ a.hero-btn:visited {
 }
 
 
+/* ================= HEADER (PC DEFAULT) ================= */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: white;        /* important */
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+/* Hamburger hidden on PC */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* ================= MOBILE ONLY ================= */
+@media (max-width: 768px) {
+
+  /* Hide buttons on phone */
+  .header-actions {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 65px;
+    right: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: 1000;
+  }
+
+  /* Show menu when active */
+  .header-actions.active {
+    display: flex;
+  }
+
+  /* Show hamburger ONLY on phone */
+  .hamburger {
+    display: block;
+  }
+}
+
+
+.header-btn.active {
+  background-color: rgba(22, 163, 74, 0.2); /* green with 20% opacity */
+  color: #166534; /* darker green text */
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+
+/* ================= MESS DASHBOARD LAYOUT ================= */
