@@ -30,13 +30,18 @@
 <header class="header">
   <div class="logo">🍽 PlateShare</div>
 
-  <div class="header-actions">
+  <!-- Navigation buttons -->
+  <nav class="header-actions" id="navMenu">
     <a href="index.html" class="header-btn">Home</a>
-    <a href="signin.html" class="header-btn">Sign In</a>
+    <a href="signin.html" class="header-btn">Login</a>
     <a href="signup.html" class="header-btn">Sign Up</a>
     <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Logout</button>
-  </div>
+  </nav>
+
+  <!-- Hamburger icon (mobile only) -->
+  <div class="hamburger" id="hamburger">☰</div>
 </header>
+
 
 <!-- ================= HERO ================= -->
 <section class="hero">
@@ -152,7 +157,7 @@
   </div>
 </div>
 
-
+<script src="navbar.js"></script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
