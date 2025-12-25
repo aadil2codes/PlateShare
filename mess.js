@@ -248,7 +248,8 @@ async function reverseGeocode(lat, lng) {
 
 
 window.openMap = function () {
-  document.getElementById("mapModal").style.display = "none";
+  const modal = document.getElementById("mapModal");
+  modal.style.display = "block";
 
   setTimeout(() => {
     if (!map) {
@@ -259,24 +260,25 @@ window.openMap = function () {
       }).addTo(map);
 
       map.on("click", async function (e) {
-  selectedLat = e.latlng.lat;
-  selectedLng = e.latlng.lng;
+        selectedLat = e.latlng.lat;
+        selectedLng = e.latlng.lng;
 
-  if (marker) map.removeLayer(marker);
-  marker = L.marker([selectedLat, selectedLng]).addTo(map);
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([selectedLat, selectedLng]).addTo(map);
 
-  const address = await reverseGeocode(selectedLat, selectedLng);
-  document.getElementById("location").value = address;
-});
-
+        const address = await reverseGeocode(selectedLat, selectedLng);
+        document.getElementById("location").value = address;
+      });
     }
 
-    map.invalidateSize(); // 🔥 IMPORTANT
-  }, 200);
+    map.invalidateSize(); // ✅ works now
+  }, 300);
 };
+
 
 window.closeMap = function () {
   document.getElementById("mapModal").style.display = "none";
+
 
   if (selectedLat && selectedLng) {
     document.getElementById("location").value =
@@ -289,6 +291,9 @@ window.useCurrentLocation = function () {
     alert("Geolocation not supported");
     return;
   }
+
+  // ✅ ensure map exists
+  if (!map) openMap();
 
   navigator.geolocation.getCurrentPosition(async pos => {
     selectedLat = pos.coords.latitude;
@@ -305,6 +310,7 @@ window.useCurrentLocation = function () {
     alert("Location access denied");
   });
 };
+
 
 
 
