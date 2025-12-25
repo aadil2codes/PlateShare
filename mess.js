@@ -98,12 +98,25 @@ function loadPreviousFood(id) {
   onSnapshot(q, snap => {
     previousFoodList.innerHTML = "";
     snap.forEach(d => {
-      previousFoodList.innerHTML += `
-        <div class="food-card">
-          <b>${d.data().foodName}</b><br>
-          ${d.data().quantity} plates<br>
-          ${d.data().location}
-        </div>`;
+      const food = d.data();
+
+let statusText = "";
+if (food.status === "available") {
+  statusText = `<b>Status:</b> Available`;
+} else if (food.status === "pickup") {
+  statusText = `<b>Status:</b> Picked up<br>
+                <b>Picked by:</b> ${food.pickedByName || "NGO"}`;
+}
+
+previousFoodList.innerHTML += `
+  <div class="food-card">
+    <b>${food.foodName}</b><br>
+    Quantity: ${food.quantity} plates<br>
+    Location: ${food.location}<br>
+    ${statusText}
+  </div>
+`;
+
     });
   });
 }
@@ -341,6 +354,7 @@ window.confirmPostFood = function () {
   closeConfirmPost();
   postFood();
 };
+
 
 
 
