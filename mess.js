@@ -9,6 +9,13 @@ from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 const db = getFirestore();
 const auth = getAuth();
 
+const foodNameInput = document.getElementById("foodName");
+const quantityInput = document.getElementById("quantity");
+const availableTill = document.getElementById("availableTill");
+const locationInput = document.getElementById("location");
+const previousFoodList = document.getElementById("previousFoodList");
+
+
 let map, marker;
 let selectedLat = null;
 let selectedLng = null;
@@ -334,6 +341,7 @@ window.confirmPostFood = function () {
   closeConfirmPost();
   postFood();
 };
+
 
 
 
