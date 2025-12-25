@@ -862,5 +862,17 @@ a.hero-btn:visited {
   color: #ffffff;
 }
 
+.input-label {
+  display: block;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+
+
 
 
