@@ -847,6 +847,20 @@ a.hero-btn:visited {
 
 
 /* ================= MESS DASHBOARD LAYOUT ================= */
+#todayBtn,
+#tomorrowBtn {
+  background: #ffffff;
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
+  transition: all 0.2s ease;
+}
+
+/* Active (green) */
+#todayBtn.active,
+#tomorrowBtn.active {
+  background: #2e7d32;
+  color: #ffffff;
+}
 
 
 
