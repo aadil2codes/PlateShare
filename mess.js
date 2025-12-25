@@ -307,13 +307,24 @@ window.useCurrentLocation = function () {
 };
 
 window.openConfirmPost = function () {
-  document.getElementById("confirmPostModal").style.display = "block";
+  const food = foodNameInput.value;
+  const qty = quantityInput.value;
+  const time = availableTill.value;
+  const loc = locationInput.value;
 
-  document.getElementById("cFood").innerText = foodNameInput.value;
-  document.getElementById("cQty").innerText = quantityInput.value;
-  document.getElementById("cTime").innerText = availableTill.value;
-  document.getElementById("cLoc").innerText = locationInput.value;
+  if (!food || !qty || !time || !loc || !window.selectedDate) {
+    alert("Please complete all fields before posting");
+    return;
+  }
+
+  document.getElementById("cFood").innerText = food;
+  document.getElementById("cQty").innerText = qty;
+  document.getElementById("cTime").innerText = time;
+  document.getElementById("cLoc").innerText = loc;
+
+  document.getElementById("confirmPostModal").style.display = "block";
 };
+
 
 window.closeConfirmPost = function () {
   document.getElementById("confirmPostModal").style.display = "none";
@@ -323,6 +334,7 @@ window.confirmPostFood = function () {
   closeConfirmPost();
   postFood();
 };
+
 
 
 
