@@ -247,7 +247,7 @@ input, select {
 
 .secondary-btn {
   background: #2e7d32;
-  colour: white
+  colour: white;
   border: none;
   padding: 10px 18px;
   border-radius: 6px;
@@ -847,4 +847,5 @@ a.hero-btn:visited {
 
 
 /* ================= MESS DASHBOARD LAYOUT ================= */
+
 
