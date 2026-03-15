@@ -171,7 +171,7 @@ window.login = async function () {
     const cred = await signInWithEmailAndPassword(auth, email, password);
 
     if (!cred.user.emailVerified) {
-      alert("Please verify your email before logging in.");
+      alert("Please verify your email (Maybe in spam folder).");
       await signOut(auth);
       return;
     }
@@ -183,9 +183,10 @@ window.login = async function () {
     if (!snap.exists()) {
 
       await setDoc(userRef, {
-        email: cred.user.email,
-        role: "ngo",   // default role
-        createdAt: new Date()
+      name: cred.user.email.split("@")[0], // fallback name
+      email: cred.user.email,
+      role: "ngo",
+      createdAt: new Date()
       });
 
     }
