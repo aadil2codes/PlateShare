@@ -1,4 +1,3 @@
-
 // 🔹 Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 
@@ -6,7 +5,9 @@ import {
   getAuth,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 import {
@@ -28,15 +29,21 @@ const firebaseConfig = {
   projectId: "plateshare-eafce"
 };
 
-// 🔹 Init
+// 🔹 Init Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+
+// =======================
+// 🗺 FOOD MAP
+// =======================
 
 let foodMap;
 let foodMarkers = [];
 
 function initFoodMap() {
+
   const mapDiv = document.getElementById("foodMap");
   if (!mapDiv) return;
 
@@ -50,55 +57,59 @@ function initFoodMap() {
 }
 
 function loadFoodMarkers() {
+
   const q = query(
     collection(db, "food_posts"),
     where("status", "==", "available")
   );
 
   onSnapshot(q, (snapshot) => {
+
     foodMarkers.forEach(m => foodMap.removeLayer(m));
     foodMarkers = [];
 
-    snapshot.forEach((doc) => {
-      const food = doc.data();
+    snapshot.forEach((docSnap) => {
+
+      const food = docSnap.data();
 
       if (!food.lat || !food.lng) return;
 
       const marker = L.marker([food.lat, food.lng])
-  .addTo(foodMap)
-  .bindPopup(`
-    <b>${food.foodName}</b><br>
-    Quantity: ${food.quantity} plates<br>
-    Location: ${food.location}<br>
-    <b>Available till:</b> ${formatDateTime(food.availableTill)}
-  `);
-
+        .addTo(foodMap)
+        .bindPopup(`
+          <b>${food.foodName}</b><br>
+          Quantity: ${food.quantity} plates<br>
+          Location: ${food.location}<br>
+          <b>Available till:</b> ${formatDateTime(food.availableTill)}
+        `);
 
       foodMarkers.push(marker);
+
     });
+
   });
 }
 
-
-// Init only on dashboard
+// Load map only if map exists
 document.addEventListener("DOMContentLoaded", initFoodMap);
 
 
+// =======================
+// 🔐 SIGNUP
+// =======================
 
-
-// 🔹 SIGNUP
 window.signup = async function () {
+
   try {
+
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
-    // ✅ RADIO BUTTON ROLE
     const role = document.querySelector(
       'input[name="role"]:checked'
     )?.value;
 
-    // ✅ VALIDATION (RIGHT PLACE)
     if (!name || !email || !password) {
       alert("Please fill all fields");
       return;
@@ -117,7 +128,10 @@ window.signup = async function () {
     // 🔥 CREATE USER
     const cred = await createUserWithEmailAndPassword(auth, email, password);
 
-    // 🔥 SAVE USER DATA
+    // 🔥 SEND EMAIL VERIFICATION
+    await sendEmailVerification(cred.user);
+
+    // 🔥 SAVE USER PROFILE
     await setDoc(doc(db, "users", cred.user.uid), {
       name,
       email,
@@ -125,58 +139,113 @@ window.signup = async function () {
       createdAt: new Date()
     });
 
-    // 🔁 REDIRECT
-    redirect(role);
+    alert("Verification email sent. Please verify before logging in.");
+
+    // 🔒 FORCE LOGOUT
+    await signOut(auth);
+
+    // 🔁 REDIRECT TO LOGIN
+    window.location.href = "signin.html";
 
   } catch (error) {
+
     console.error("Signup error:", error);
     alert(error.message);
+
   }
+
 };
 
 
+// =======================
+// 🔐 LOGIN
+// =======================
 
-// 🔹 LOGIN
 window.login = async function () {
+
   try {
+
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
     const cred = await signInWithEmailAndPassword(auth, email, password);
 
-    const snap = await getDoc(doc(db, "users", cred.user.uid));
-
-    if (!snap.exists()) {
-      alert("User profile not found. Please sign up again.");
+    if (!cred.user.emailVerified) {
+      alert("Please verify your email before logging in.");
+      await signOut(auth);
       return;
     }
 
-    redirect(snap.data().role);
+    const userRef = doc(db, "users", cred.user.uid);
+    const snap = await getDoc(userRef);
+
+    // 🔥 CREATE PROFILE IF MISSING
+    if (!snap.exists()) {
+
+      await setDoc(userRef, {
+        email: cred.user.email,
+        role: "ngo",   // default role
+        createdAt: new Date()
+      });
+
+    }
+
+    const userData = (await getDoc(userRef)).data();
+
+    redirect(userData.role);
 
   } catch (error) {
-    alert(error.message);
+
     console.error(error);
+    alert(error.message);
+
   }
+
 };
 
 
-// 🔹 REDIRECT
+// =======================
+// 🔁 REDIRECT BASED ON ROLE
+// =======================
+
 function redirect(role) {
+
   if (role === "mess") {
     window.location.href = "mess.html";
-  } else if (role === "ngo") {
+  }
+
+  else if (role === "ngo") {
     window.location.href = "ngo.html";
   }
+
 }
 
-// 🔹 DASHBOARD PROTECTION
+
+// =======================
+// 🔒 DASHBOARD PROTECTION
+// =======================
+
 onAuthStateChanged(auth, async (user) => {
+
   if (!user) return;
+
+  // 🔒 BLOCK UNVERIFIED USERS
+  if (!user.emailVerified) {
+
+    alert("Please verify your email first.");
+
+    await signOut(auth);
+
+    location.href = "signin.html";
+
+    return;
+
+  }
 
   const snap = await getDoc(doc(db, "users", user.uid));
 
   if (!snap.exists()) {
-    console.error("User document missing for UID:", user.uid);
+    console.error("User document missing.");
     return;
   }
 
@@ -189,23 +258,29 @@ onAuthStateChanged(auth, async (user) => {
   if (location.pathname.includes("ngo") && role !== "ngo") {
     location.href = "signin.html";
   }
+
 });
 
 
+// =======================
+// 🕒 DATE FORMATTER
+// =======================
 
 function formatDateTime(ts) {
+
   if (!ts) return "";
 
   const date = ts.toDate ? ts.toDate() : new Date(ts);
 
   return date.toLocaleString("en-IN", {
+
     day: "2-digit",
     month: "short",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
     hour12: true
+
   });
+
 }
-
-
